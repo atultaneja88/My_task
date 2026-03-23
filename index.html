@@ -4,698 +4,228 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You, Tannu 🌙</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,900;1,400;1,600&family=Dancing+Script:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;900&family=Dancing+Script:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --midnight: #06061a;
-  --deep: #0d0d2b;
-  --gold: #d4a853;
-  --gold-light: #f0c97a;
-  --rose: #e8849a;
-  --blush: #f5b8c8;
-  --cream: #f5efe0;
-  --dim: rgba(245,239,224,0.6);
-  --glass: rgba(255,255,255,0.04);
-  --border: rgba(212,168,83,0.15);
+body{
+  margin:0;
+  background:#06061a;
+  color:#f5efe0;
+  font-family:'Lato';
+  text-align:center;
 }
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{background:var(--midnight);color:var(--cream);font-family:'Lato',sans-serif;overflow-x:hidden;}
-
-/* STARFIELD */
-#starfield{position:fixed;inset:0;z-index:0;pointer-events:none;}
-
-/* HEARTS */
-.hearts{position:fixed;bottom:0;left:0;width:100%;height:0;overflow:visible;pointer-events:none;z-index:5;}
-.heart{position:absolute;bottom:-10px;animation:floatHeart linear infinite;opacity:0;}
-@keyframes floatHeart{0%{transform:translateY(0) rotate(0deg) scale(1);opacity:.75;}100%{transform:translateY(-110vh) rotate(360deg) scale(0.5);opacity:0;}}
-
-/* MUSIC MODAL */
-#music-modal{
-  display:none;position:fixed;inset:0;z-index:9999;
-  background:rgba(6,6,26,0.92);backdrop-filter:blur(16px);
-  align-items:center;justify-content:center;
-}
-#music-modal.active{display:flex;}
-.music-modal-inner{
-  position:relative;width:min(560px,92vw);
-  background:rgba(15,15,40,0.95);border:1px solid var(--border);
-  border-radius:24px;padding:2.5rem;overflow:hidden;
-}
-.music-modal-inner::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 30% 0%,rgba(212,168,83,0.08),transparent 60%),
-             radial-gradient(ellipse at 70% 100%,rgba(232,132,154,0.06),transparent 60%);
-  pointer-events:none;
-}
-.modal-close{
-  position:absolute;top:1.2rem;right:1.2rem;
-  width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);
-  background:transparent;color:var(--cream);font-size:1.1rem;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:background 0.2s;
-}
-.modal-close:hover{background:rgba(255,255,255,0.08);}
-.modal-song-label{font-family:'Lato',sans-serif;font-size:0.68rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;}
-.modal-song-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--cream);margin-bottom:0.3rem;}
-.modal-song-artist{font-size:0.9rem;font-weight:300;color:var(--dim);margin-bottom:1.5rem;}
-.modal-song-why{font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--rose);margin-bottom:1.5rem;line-height:1.6;}
-#music-iframe{width:100%;height:200px;border-radius:12px;border:none;}
-
-/* LETTER IMAGE MODAL */
-#letter-modal{
-  display:none;position:fixed;inset:0;z-index:9998;
-  background:rgba(6,6,26,0.95);backdrop-filter:blur(20px);
-  align-items:center;justify-content:center;
-}
-#letter-modal.active{display:flex;}
-#letter-modal img{max-width:90vw;max-height:90vh;border-radius:12px;border:1px solid var(--border);box-shadow:0 30px 80px rgba(0,0,0,0.8);}
-.letter-modal-close{position:absolute;top:1.5rem;right:1.5rem;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);background:transparent;color:var(--cream);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 
 /* COVER */
-#cover{position:relative;z-index:10;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;overflow:hidden;}
-.cover-glow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(212,168,83,0.1) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:pulse 6s ease-in-out infinite;}
-@keyframes pulse{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.8;}50%{transform:translate(-50%,-50%) scale(1.1);opacity:1;}}
-.cover-date{font-size:0.75rem;letter-spacing:0.4em;text-transform:uppercase;color:var(--gold);opacity:0;animation:fadeUp 1s 0.3s forwards;}
-.cover-title{font-family:'Playfair Display',serif;font-size:clamp(3.5rem,10vw,7rem);font-weight:900;font-style:italic;line-height:1.05;margin-top:1rem;opacity:0;animation:fadeUp 1s 0.6s forwards;}
-.cover-title span{color:var(--gold);}
-.cover-sub{font-family:'Dancing Script',cursive;font-size:clamp(1.2rem,3vw,1.9rem);color:var(--rose);margin-top:1rem;opacity:0;animation:fadeUp 1s 1s forwards;}
-.cover-divider{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.8rem auto;opacity:0;animation:fadeUp 1s 1.3s forwards;}
-.cover-msg{font-weight:300;font-size:.95rem;color:var(--dim);max-width:340px;line-height:1.9;opacity:0;animation:fadeUp 1s 1.6s forwards;}
-.scroll-cta{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0;animation:fadeUp 1s 2.2s forwards;}
-.scroll-cta span{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.6;}
-.scroll-arrow{width:18px;height:18px;border-right:1px solid var(--gold);border-bottom:1px solid var(--gold);transform:rotate(45deg);opacity:.4;animation:bounce 2s ease-in-out 3s infinite;}
-@keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(7px);}}
+#cover{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
 
-/* SECTIONS */
-section{position:relative;z-index:10;padding:5.5rem 2rem;max-width:880px;margin:0 auto;}
-.section-label{font-size:.67rem;font-weight:700;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1.4rem;display:flex;align-items:center;gap:1rem;}
-.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:.25;}
-.section-heading{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.6rem);font-weight:900;line-height:1.1;margin-bottom:1.8rem;}
-.section-heading em{font-style:italic;color:var(--rose);}
-.section-body{font-weight:300;font-size:1.02rem;line-height:2;color:var(--dim);max-width:620px;}
-.sep{width:50px;height:2px;background:linear-gradient(90deg,var(--gold),var(--rose));margin:2rem 0;border-radius:2px;}
+h1{
+  font-family:'Playfair Display';
+  font-size:3rem;
+}
 
-/* TIMELINE */
-.timeline{margin-top:3.5rem;display:flex;flex-direction:column;}
-.tl-item{display:flex;gap:2rem;position:relative;padding-bottom:3rem;}
-.tl-item:last-child{padding-bottom:0;}
-.tl-left{display:flex;flex-direction:column;align-items:center;min-width:52px;}
-.tl-dot{width:13px;height:13px;border-radius:50%;background:var(--gold);border:3px solid var(--midnight);box-shadow:0 0 0 1px var(--gold);margin-top:5px;flex-shrink:0;}
-.tl-line{width:1px;flex:1;background:linear-gradient(to bottom,var(--gold),transparent);opacity:.18;margin-top:6px;}
-.tl-time{font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.65;margin-bottom:.4rem;}
-.tl-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:var(--cream);margin-bottom:.5rem;}
-.tl-desc{font-size:.9rem;font-weight:300;color:var(--dim);line-height:1.85;}
+/* BUTTON */
+#nextBtn{
+  margin-top:2rem;
+  padding:12px 28px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(135deg,#ff6b8a,#d4a853);
+  color:white;
+  cursor:pointer;
+}
 
-/* TRAIT CARDS */
-.trait-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.1rem;margin-top:3rem;}
-.trait-card{background:var(--glass);border:1px solid var(--border);border-radius:16px;padding:1.8rem 1.5rem;backdrop-filter:blur(10px);transition:transform .3s,border-color .3s;}
-.trait-card:hover{transform:translateY(-4px);border-color:rgba(212,168,83,.38);}
-.trait-icon{font-size:1.9rem;margin-bottom:.9rem;}
-.trait-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:600;color:var(--gold);margin-bottom:.4rem;}
-.trait-desc{font-size:.86rem;font-weight:300;color:var(--dim);line-height:1.75;}
+/* HEART BURST */
+.burst-heart{
+  position:fixed;
+  font-size:1.5rem;
+  animation:burst 1s ease forwards;
+}
+@keyframes burst{
+  0%{transform:scale(0.5);opacity:1;}
+  100%{transform:translateY(-150px) scale(1.5);opacity:0;}
+}
 
-/* PHOTO SECTION */
-.photo-intro{font-weight:300;font-size:.95rem;color:var(--dim);line-height:1.9;max-width:560px;margin-bottom:2.5rem;}
-.photo-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:220px 220px;gap:1rem;}
-.photo-slot{border-radius:16px;overflow:hidden;position:relative;cursor:pointer;background:rgba(255,255,255,0.025);border:1.5px dashed rgba(212,168,83,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;transition:border-color .3s,background .3s;}
-.photo-slot:hover{border-color:rgba(212,168,83,.5);background:rgba(212,168,83,.04);}
-.photo-slot.has-photo{border:none;cursor:default;}
-.photo-slot img.slot-img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:16px;}
-.photo-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,26,.75) 0%,transparent 55%);border-radius:16px;opacity:0;transition:opacity .3s;display:flex;align-items:flex-end;padding:1rem;}
-.photo-slot.has-photo:hover .photo-overlay{opacity:1;}
-.photo-caption{font-family:'Dancing Script',cursive;font-size:.95rem;color:var(--cream);}
-.upload-icon{font-size:1.7rem;opacity:.3;}
-.upload-hint{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.45;}
-.photo-slot:first-child{grid-row:span 2;}
-.photo-slot input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:5;}
-.photo-slot.has-photo input[type="file"]{z-index:-1;}
-.photo-change-btn{position:absolute;top:.6rem;right:.6rem;background:rgba(6,6,26,.8);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:var(--cream);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .6rem;cursor:pointer;opacity:0;transition:opacity .3s;z-index:6;}
-.photo-slot.has-photo:hover .photo-change-btn{opacity:1;}
+/* SECTION */
+section{
+  padding:80px 20px;
+}
 
-/* LETTER IMAGES */
-.letter-images-row{display:flex;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
-.letter-img-slot{position:relative;flex:1;min-width:200px;height:280px;border-radius:16px;overflow:hidden;background:rgba(255,255,255,.025);border:1.5px dashed rgba(232,132,154,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;cursor:pointer;transition:border-color .3s,background .3s;}
-.letter-img-slot:hover{border-color:rgba(232,132,154,.55);background:rgba(232,132,154,.04);}
-.letter-img-slot.has-img{border:none;cursor:default;}
-.letter-img-slot img.letter-preview{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:16px;}
-.letter-img-slot .view-overlay{position:absolute;inset:0;background:rgba(6,6,26,.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s;border-radius:16px;cursor:pointer;}
-.letter-img-slot.has-img:hover .view-overlay{opacity:1;}
-.view-overlay span{font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;color:var(--cream);border:1px solid rgba(255,255,255,.4);padding:.4rem .9rem;border-radius:8px;}
-.letter-img-slot input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:5;}
-.letter-img-slot.has-img input[type="file"]{z-index:-1;}
-.letter-img-num{font-family:'Playfair Display',serif;font-size:1rem;color:var(--rose);opacity:.4;}
-.letter-img-hint{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rose);opacity:.4;}
+/* COUNTDOWN */
+#countdown{
+  font-size:1.3rem;
+  color:#f0c97a;
+  margin-top:20px;
+}
 
 /* VIDEO */
-.video-container{margin-top:2.5rem;border-radius:20px;overflow:hidden;position:relative;background:rgba(255,255,255,.03);border:1.5px dashed rgba(232,132,154,.28);min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .3s,background .3s;}
-.video-container:hover{border-color:rgba(232,132,154,.55);background:rgba(232,132,154,.04);}
-.video-container video{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:20px;display:none;}
-.vid-placeholder{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:3rem;text-align:center;}
-.vid-play-ring{width:68px;height:68px;border-radius:50%;border:1.5px solid rgba(232,132,154,.35);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--rose);opacity:.55;margin-bottom:.4rem;}
-.vid-placeholder h3{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;}
-.vid-placeholder p{font-size:.85rem;color:var(--dim);max-width:300px;line-height:1.7;}
-.vid-hint{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);opacity:.5;margin-top:.2rem;}
-.video-container input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:5;}
-
-/* SONGS */
-.song-list{margin-top:3rem;display:flex;flex-direction:column;gap:.8rem;}
-.song-item{display:flex;align-items:center;gap:1.2rem;padding:1rem 1.2rem;border-radius:12px;background:var(--glass);border:1px solid rgba(255,255,255,.05);transition:background .3s,border-color .3s,transform .3s;cursor:pointer;position:relative;overflow:hidden;}
-.song-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,rgba(212,168,83,.08),transparent);transition:width .4s;}
-.song-item:hover::before{width:100%;}
-.song-item:hover{border-color:rgba(212,168,83,.25);transform:translateX(5px);}
-.song-num{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--gold);opacity:.35;min-width:26px;}
-.song-info{flex:1;}
-.song-title{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:600;}
-.song-artist{font-size:.78rem;font-weight:300;color:var(--dim);margin-top:.12rem;}
-.song-why{font-family:'Dancing Script',cursive;font-size:.83rem;color:var(--rose);opacity:.8;text-align:right;max-width:130px;line-height:1.35;}
-.song-play-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(212,168,83,.3);background:rgba(212,168,83,.06);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;transition:background .2s,border-color .2s;}
-.song-item:hover .song-play-btn{background:rgba(212,168,83,.15);border-color:rgba(212,168,83,.6);}
+.video-container{
+  margin-top:30px;
+  border:2px dashed #e8849a;
+  padding:30px;
+}
+video{
+  width:100%;
+  max-width:500px;
+  display:none;
+}
 
 /* LETTER */
-.letter-wrap{position:relative;margin-top:2rem;padding:3.5rem;background:rgba(255,255,255,.025);border-radius:24px;border:1px solid rgba(232,132,154,.12);overflow:hidden;}
-.letter-wrap::before{content:'"';position:absolute;top:-2rem;left:1.5rem;font-family:'Playfair Display',serif;font-size:13rem;color:var(--rose);opacity:.05;line-height:1;}
-.letter-text{font-family:'Dancing Script',cursive;font-size:1.3rem;line-height:2.1;color:var(--cream);position:relative;z-index:1;}
-.letter-text p{margin-bottom:1.1rem;}
-.letter-text em{color:var(--gold);font-style:normal;}
-.letter-sign{font-family:'Dancing Script',cursive;font-size:1.8rem;color:var(--gold);margin-top:2rem;text-align:right;}
-
-/* APOLOGY NOTE */
-.apology-card{margin-top:3rem;padding:2.5rem;background:linear-gradient(135deg,rgba(232,132,154,.07),rgba(212,168,83,.04));border:1px solid rgba(232,132,154,.18);border-radius:20px;position:relative;overflow:hidden;}
-.apology-card::after{content:'🌙';position:absolute;right:2rem;top:50%;transform:translateY(-50%);font-size:5rem;opacity:.06;}
-.apology-tag{font-size:.67rem;letter-spacing:.3em;text-transform:uppercase;color:var(--rose);margin-bottom:.8rem;display:block;}
-.apology-text{font-family:'Dancing Script',cursive;font-size:1.25rem;line-height:2;color:var(--cream);}
-.apology-text em{color:var(--gold);}
-
-/* FOOD MEMORY */
-.memory-card{position:relative;padding:2.5rem;background:var(--glass);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-top:3rem;}
-.memory-emoji{position:absolute;right:2rem;top:2rem;font-size:3rem;opacity:.15;}
-.memory-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:var(--gold);margin-bottom:1rem;}
-.memory-text{font-size:.92rem;font-weight:300;color:var(--dim);line-height:1.9;}
-
-/* FUTURE / WEDDING */
-.wedding-card{text-align:center;padding:5rem 3rem;background:linear-gradient(135deg,rgba(212,168,83,.07),rgba(232,132,154,.06));border-radius:28px;border:1px solid rgba(212,168,83,.14);position:relative;overflow:hidden;margin-top:2rem;}
-.wedding-card::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");pointer-events:none;border-radius:28px;}
-.wedding-rings{font-size:2.3rem;margin-bottom:1.4rem;letter-spacing:.1em;}
-.wedding-heading{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,5vw,3.3rem);font-weight:900;font-style:italic;line-height:1.15;margin-bottom:1.4rem;position:relative;z-index:1;}
-.wedding-heading span{color:var(--rose);}
-.wedding-body{font-size:.98rem;font-weight:300;color:var(--dim);line-height:2;max-width:500px;margin:0 auto 2rem;position:relative;z-index:1;}
-.wedding-date-badge{display:inline-flex;flex-direction:column;align-items:center;gap:.3rem;position:relative;z-index:1;}
-.wedding-date-main{font-family:'Dancing Script',cursive;font-size:2rem;color:var(--gold);}
-.wedding-date-sub{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);opacity:.7;}
-.wedding-divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:.8rem auto;}
-.anniv-note{display:inline-block;margin-top:2rem;font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rose);opacity:.6;position:relative;z-index:1;}
-
-/* FOOTER */
-footer{position:relative;z-index:10;text-align:center;padding:4rem 2rem 5rem;border-top:1px solid rgba(255,255,255,.05);}
-.footer-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(212,168,83,.07);border:1px solid rgba(212,168,83,.18);border-radius:100px;padding:.4rem 1rem;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
-footer p{font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--gold);opacity:.65;}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
-
-@media(max-width:600px){
-  .photo-grid{grid-template-columns:1fr 1fr;grid-template-rows:170px 170px 170px;}
-  .photo-slot:first-child{grid-column:span 2;grid-row:span 1;}
-  .letter-wrap{padding:2rem 1.4rem;}
-  .wedding-card{padding:3rem 1.5rem;}
-  section{padding:4rem 1.3rem;}
-  .letter-images-row{flex-direction:column;}
-  .letter-img-slot{min-height:240px;}
+#typingText{
+  font-family:'Dancing Script';
+  font-size:1.3rem;
+  max-width:600px;
+  margin:auto;
+  line-height:2;
 }
 </style>
 </head>
+
 <body>
 
-<canvas id="starfield"></canvas>
-<div class="hearts" id="hearts"></div>
+<!-- 🎵 MUSIC -->
+<audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
-<!-- MUSIC MODAL -->
-<div id="music-modal">
-  <div class="music-modal-inner">
-    <button class="modal-close" onclick="closeMusic()">✕</button>
-    <p class="modal-song-label" id="m-label">Now Playing</p>
-    <h2 class="modal-song-title" id="m-title"></h2>
-    <p class="modal-song-artist" id="m-artist"></p>
-    <p class="modal-song-why" id="m-why"></p>
-    <iframe id="music-iframe" allow="autoplay" allowfullscreen src=""></iframe>
-  </div>
-</div>
-
-<!-- LETTER IMAGE MODAL -->
-<div id="letter-modal" onclick="closeLetterModal()">
-  <button class="letter-modal-close" onclick="closeLetterModal()">✕</button>
-  <img id="letter-modal-img" src="" alt="Letter">
-</div>
-
-<!-- ══ COVER ══ -->
+<!-- COVER -->
 <div id="cover">
-  <div class="cover-glow"></div>
-  <p class="cover-date">25 March &nbsp;·&nbsp; Happy Birthday Tannu 🌙</p>
-  <h1 class="cover-title">Hey<br><span>Tannu,</span><br>It's Your Day ✨</h1>
-  <p class="cover-sub">From the hostel balcony to forever — this is for you.</p>
-  <div class="cover-divider"></div>
-  <p class="cover-msg">Ten years of the most quietly beautiful story I've ever lived. Made only for you, Tannu — my comfort zone, my favourite person.</p>
-  <div class="scroll-cta"><span>Scroll</span><div class="scroll-arrow"></div></div>
+  <h1>Hey Tannu 💛</h1>
+  <p>This is for you...</p>
+  <button id="nextBtn">Start Our Story ❤️</button>
 </div>
 
-<!-- ══ 1. OUR STORY ══ -->
+<!-- STORY -->
 <section>
-  <p class="section-label">Chapter One</p>
-  <h2 class="section-heading">Where It<br><em>All Started</em></h2>
-  <p class="section-body">A college hostel. A Facebook profile. A boy who couldn't decide what he wanted — or maybe, a boy who was just terrified of how much he already knew.</p>
-  <div class="timeline">
-
-    <div class="tl-item">
-      <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
-      <div class="tl-right">
-        <p class="tl-time">The Beginning</p>
-        <p class="tl-title">The Friend Request Game 😅📲</p>
-        <p class="tl-desc">She was in the hostel. I was just… there, staring at her profile. Send. Delete. Send again. Delete again. I don't know how many times I did this — but I know exactly why. Because she already made me nervous before I even said hello. (And honestly? She probably saw every single one. 😂)</p>
-      </div>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
-      <div class="tl-right">
-        <p class="tl-time">The College Days</p>
-        <p class="tl-title">Balcony Calls 🌙📞</p>
-        <p class="tl-desc">And then came the video calls — the ones where we'd call from our phones and just stand on our hostel balconies seeing each other from a distance. Technically close. Perfectly far. Honestly, the most romantic thing I didn't realise was romantic at the time. Just you on your balcony, me on mine, and the whole night between us.</p>
-      </div>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
-      <div class="tl-right">
-        <p class="tl-time">Somewhere in the middle</p>
-        <p class="tl-title">The Kitchen Stool Moment 🍳🥄</p>
-        <p class="tl-desc">You made food. You pulled out a stool and told me to sit in the kitchen while you cooked. And then — you fed me with your own hands. I sat there like the luckiest person in the world. I don't know if you know how much that moment stayed with me. It wasn't big. It was everything.</p>
-      </div>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div>
-      <div class="tl-right">
-        <p class="tl-time">When I fell deeper</p>
-        <p class="tl-title">You Told Me Everything 💬💛</p>
-        <p class="tl-desc">The day you shared all your stories with me — no filter, no holding back — I felt something shift. (Okay, fine, I was a tiny bit jealous in between 😅 — sorry for that, motuu, I'm just a little possessive buddy na 🙈) But honestly? I was so happy. That you chose me. That you trusted me with all of you. That meant more than I know how to say.</p>
-      </div>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-left"><div class="tl-dot"></div></div>
-      <div class="tl-right">
-        <p class="tl-time">Today — 25 March 2026</p>
-        <p class="tl-title">A New Chapter Begins 💍</p>
-        <p class="tl-desc">Ten year of being yours. Ten year of knowing that one person is enough — that YOU are enough, every single day. And now, the story doesn't end. It begins.</p>
-      </div>
-    </div>
-
-  </div>
+  <h2>Our Story 🌙</h2>
+  <p>From balcony calls to forever...</p>
 </section>
 
-<!-- ══ 2. WHO SHE IS ══ -->
+<!-- LETTER -->
 <section>
-  <p class="section-label">Chapter Two</p>
-  <h2 class="section-heading">The Girl<br><em>You Are, Tannu</em></h2>
-  <p class="section-body">You think you're ordinary. I'm here to tell you — for the hundredth time — that you are so beautifully, laughably wrong about that.</p>
-  <div class="trait-grid">
-    <div class="trait-card">
-      <div class="trait-icon">🎵</div>
-      <p class="trait-name">The Music Soul</p>
-      <p class="trait-desc">You hear feelings in songs that most people scroll past. Every melody means something to you — and your taste is quietly, completely impeccable.</p>
-    </div>
-    <div class="trait-card">
-      <div class="trait-icon">🌙</div>
-      <p class="trait-name">Beautifully Introverted</p>
-      <p class="trait-desc">You save yourself for the right people. Being in that inner circle — your one person — is one of the greatest honours of my life.</p>
-    </div>
-    <div class="trait-card">
-      <div class="trait-icon">😂</div>
-      <p class="trait-name">Secret Office Comedian</p>
-      <p class="trait-desc">Quiet. Quiet. QUIET. And then — out of nowhere — the funniest thing ever said. That contrast? Absolutely lethal. Nobody sees it coming.</p>
-    </div>
-    <div class="trait-card">
-      <div class="trait-icon">🕯️</div>
-      <p class="trait-name">Two Is the Whole World</p>
-      <p class="trait-desc">You don't need a crowd. You need the right one. And from all the people in the world — you chose me. I will never take that lightly. Never.</p>
-    </div>
-    <div class="trait-card">
-      <div class="trait-icon">🫂</div>
-      <p class="trait-name">My Comfort Zone</p>
-      <p class="trait-desc">I can wait all day. But the moment I see you — just you — it's like the whole world exhales. You are my lifetime comfort zone, Tannu.</p>
-    </div>
-    <div class="trait-card">
-      <div class="trait-icon">💛</div>
-      <p class="trait-name">Always There</p>
-      <p class="trait-desc">Any time I need you — you are there. No questions. No delays. Just you, present, fully. That's a rare, rare thing. And I don't forget it for a second.</p>
-    </div>
-  </div>
+  <h2>A Letter 💌</h2>
+  <div id="typingText"></div>
 </section>
 
-<!-- ══ 3. PHOTOS ══ -->
+<!-- VIDEO -->
 <section>
-  <p class="section-label">Chapter Three</p>
-  <h2 class="section-heading"><em>Our</em> Frames</h2>
-  <p class="photo-intro">Add our photos here. They save automatically — so every time you open this page, they'll still be here. Just ours.</p>
-  <div class="photo-grid">
-    <div class="photo-slot" id="slot0">
-      <input type="file" accept="image/*" onchange="loadPhoto(0,this)">
-      <div class="upload-icon">📷</div>
-      <div class="upload-hint">Add Photo 1</div>
-      <div class="photo-overlay"><span class="photo-caption">Our favourite one 🌙</span></div>
-      <button class="photo-change-btn" onclick="triggerPhotoChange(event,0)">Change</button>
-    </div>
-    <div class="photo-slot" id="slot1">
-      <input type="file" accept="image/*" onchange="loadPhoto(1,this)">
-      <div class="upload-icon">📷</div>
-      <div class="upload-hint">Add Photo 2</div>
-      <div class="photo-overlay"><span class="photo-caption">A stolen moment ✨</span></div>
-      <button class="photo-change-btn" onclick="triggerPhotoChange(event,1)">Change</button>
-    </div>
-    <div class="photo-slot" id="slot2">
-      <input type="file" accept="image/*" onchange="loadPhoto(2,this)">
-      <div class="upload-icon">📷</div>
-      <div class="upload-hint">Add Photo 3</div>
-      <div class="photo-overlay"><span class="photo-caption">Just the two of us 💛</span></div>
-      <button class="photo-change-btn" onclick="triggerPhotoChange(event,2)">Change</button>
-    </div>
-    <div class="photo-slot" id="slot3">
-      <input type="file" accept="image/*" onchange="loadPhoto(3,this)">
-      <div class="upload-icon">📷</div>
-      <div class="upload-hint">Add Photo 4</div>
-      <div class="photo-overlay"><span class="photo-caption">That smile 🌸</span></div>
-      <button class="photo-change-btn" onclick="triggerPhotoChange(event,3)">Change</button>
-    </div>
-    <div class="photo-slot" id="slot4">
-      <input type="file" accept="image/*" onchange="loadPhoto(4,this)">
-      <div class="upload-icon">📷</div>
-      <div class="upload-hint">Add Photo 5</div>
-      <div class="photo-overlay"><span class="photo-caption">The best chapter 💍</span></div>
-      <button class="photo-change-btn" onclick="triggerPhotoChange(event,4)">Change</button>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 4. LETTERS ══ -->
-<section>
-  <p class="section-label">Chapter Four</p>
-  <h2 class="section-heading">The Letters<br><em>You Wrote</em></h2>
-  <p class="section-body">Some feelings don't fit into texts. Add the 3 letter photos here — click them to view them big. They stay saved every time you open this page.</p>
-  <div class="letter-images-row">
-    <div class="letter-img-slot" id="lslot0">
-      <input type="file" accept="image/*" onchange="loadLetterImg(0,this)">
-      <div class="letter-img-num">Letter I</div>
-      <div class="letter-img-hint">Add Image</div>
-      <div class="view-overlay" onclick="viewLetterImg(0)"><span>View Full</span></div>
-    </div>
-    <div class="letter-img-slot" id="lslot1">
-      <input type="file" accept="image/*" onchange="loadLetterImg(1,this)">
-      <div class="letter-img-num">Letter II</div>
-      <div class="letter-img-hint">Add Image</div>
-      <div class="view-overlay" onclick="viewLetterImg(1)"><span>View Full</span></div>
-    </div>
-    <div class="letter-img-slot" id="lslot2">
-      <input type="file" accept="image/*" onchange="loadLetterImg(2,this)">
-      <div class="letter-img-num">Letter III</div>
-      <div class="letter-img-hint">Add Image</div>
-      <div class="view-overlay" onclick="viewLetterImg(2)"><span>View Full</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 5. VIDEO ══ -->
-<section>
-  <p class="section-label">Chapter Five</p>
-  <h2 class="section-heading">A Memory<br><em>In Motion</em></h2>
-  <p class="section-body">That one video. The one that moves. Add it here and it lives in this page — just for us.</p>
-  <div class="video-container" id="videoBox">
-    <input type="file" accept="video/*" id="videoInput" onchange="loadVideo(this)">
-    <div class="vid-placeholder" id="vidPlaceholder">
-      <div class="vid-play-ring">▶</div>
-      <h3>Our Video</h3>
-      <p>Add that one video that makes your heart skip — our balcony call, a candid moment, anything ours.</p>
-      <span class="vid-hint">Tap to add video</span>
-    </div>
+  <h2>Our Video 🎬</h2>
+  <div class="video-container">
+    <input type="file" accept="video/*" onchange="loadVideo(this)">
     <video id="videoPlayer" controls></video>
   </div>
 </section>
 
-<!-- ══ 6. SONGS ══ -->
+<!-- WEDDING -->
 <section>
-  <p class="section-label">Chapter Six</p>
-  <h2 class="section-heading">Songs That<br><em>Sound Like Us</em></h2>
-  <p class="section-body">Click any song to play it right here. Because you love music the way some people love breathing — quietly, completely, always.</p>
-  <div class="song-list">
-    <div class="song-item" onclick="playSong(0)">
-      <span class="song-num">01</span>
-      <div class="song-info"><p class="song-title">Perfect</p><p class="song-artist">Ed Sheeran</p></div>
-      <p class="song-why">Because you are, simply.</p>
-      <div class="song-play-btn">▶</div>
-    </div>
-    <div class="song-item" onclick="playSong(1)">
-      <span class="song-num">02</span>
-      <div class="song-info"><p class="song-title">Tum Hi Ho</p><p class="song-artist">Arijit Singh</p></div>
-      <p class="song-why">My everything, every day.</p>
-      <div class="song-play-btn">▶</div>
-    </div>
-    <div class="song-item" onclick="playSong(2)">
-      <span class="song-num">03</span>
-      <div class="song-info"><p class="song-title">A Thousand Years</p><p class="song-artist">Christina Perri</p></div>
-      <p class="song-why">I'd wait lifetimes for you.</p>
-      <div class="song-play-btn">▶</div>
-    </div>
-    <div class="song-item" onclick="playSong(3)">
-      <span class="song-num">04</span>
-      <div class="song-info"><p class="song-title">Agar Tum Saath Ho</p><p class="song-artist">A.R. Rahman · Alka Yagnik</p></div>
-      <p class="song-why">You complete every silence.</p>
-      <div class="song-play-btn">▶</div>
-    </div>
-    <div class="song-item" onclick="playSong(4)">
-      <span class="song-num">05</span>
-      <div class="song-info"><p class="song-title">Can't Help Falling in Love</p><p class="song-artist">Elvis Presley</p></div>
-      <p class="song-why">Couldn't stop even if I tried.</p>
-      <div class="song-play-btn">▶</div>
-    </div>
-    <div class="song-item" onclick="playSong(5)">
-      <span class="song-num">06</span>
-      <div class="song-info"><p class="song-title">Raabta</p><p class="song-artist">Pritam · Arijit Singh</p></div>
-      <p class="song-why">It was always you, Tannu.</p>
-      <div class="song-play-btn">▶</div>
-    </div>
-  </div>
+  <h2>Forever Begins 💍</h2>
+  <p>20 April 2026</p>
+  <div id="countdown"></div>
 </section>
-
-<!-- ══ 7. THE LETTER ══ -->
-<section>
-  <p class="section-label">Chapter Seven</p>
-  <h2 class="section-heading">Words I<br><em>Needed You to Read</em></h2>
-  <div class="letter-wrap">
-    <div class="letter-text">
-      <p>My Tannu,</p>
-      <p>Remember the friend request I sent and deleted about a hundred times? That was me being terrified of how much I already felt, before I even knew you properly. And you — I think you saw every single one. 😂</p>
-      <p>And then there were those hostel balcony calls. You on yours, me on mine. Technically we could've just walked over. But somehow — that was perfect. Just your face on my screen and the night sky behind you. I replay that a lot.</p>
-      <p>You are my <em>comfort zone</em>. Not just a phrase — I mean it in the most real way. I can wait all day, tired, restless, anywhere. But the moment I see you, it's like a whole lifetime of peace arrives at once. That's only you. It's always only been you.</p>
-      <p>I know I'm not with you today on your birthday, and I'm sorry for that, Tannu. I really am. I wish I could be there. I hope this page feels like a hug from me instead. 🫂</p>
-      <p>One year. One friendship request that finally stuck. One person who is my every small moment, my kitchen stool memory, my balcony call, my everything.</p>
-      <p>And now — just one month left. <em>20 April.</em> 💍</p>
-      <p class="letter-sign">Always yours, Bettu 💛🌙</p>
-    </div>
-  </div>
-
-  <!-- APOLOGY NOTE -->
-  <div class="apology-card">
-    <span class="apology-tag">A note from Bettu</span>
-    <p class="apology-text">Tannu, I'm really sorry I can't be with you today on your birthday. 🥺<br>I wish I could be there — sitting on that stool in your kitchen, or just standing near you. But I'm sending you this instead, with everything I have. <em>You are so loved.</em> Don't you forget that, motuu. 🌙💛</p>
-  </div>
-</section>
-
-<!-- ══ 8. SMALL MOMENTS ══ -->
-<section>
-  <p class="section-label">Chapter Eight</p>
-  <h2 class="section-heading">The Moments<br><em>I Keep</em></h2>
-  <p class="section-body">The big things are easy to remember. It's the small ones that actually live inside you forever.</p>
-
-  <div class="memory-card">
-    <div class="memory-emoji">🍳</div>
-    <p class="memory-title">The Kitchen & The Stool</p>
-    <p class="memory-text">You told me to sit. On the stool. In your kitchen. While you cooked. And then you fed me with your hands. I don't think you know how much I hold that moment. It was just lunch — but it was everything. It was you saying: "I've got you." Without saying a word.</p>
-  </div>
-
-  <div class="memory-card" style="margin-top:1rem;">
-    <div class="memory-emoji">📞</div>
-    <p class="memory-title">The Balcony Calls</p>
-    <p class="memory-text">Calling from our phones, standing on our hostel balconies, looking at each other across the distance. Some people would've thought it was ridiculous. I thought it was the most romantic thing in the world. You on your balcony. Me on mine. Just us and the night.</p>
-  </div>
-
-  <div class="memory-card" style="margin-top:1rem;">
-    <div class="memory-emoji">💬</div>
-    <p class="memory-title">When You Told Me Everything</p>
-    <p class="memory-text">The day you shared all your stories with me — all of them, no holding back — I was the happiest. (Okay fine, maybe a tiny bit jealous at one or two parts 😅 — sorry motuu, you know I'm just a little possessive na 🙈). But mostly just grateful. So grateful you chose me as the one person to tell it all to.</p>
-  </div>
-</section>
-
-<!-- ══ 9. WEDDING / FOREVER ══ -->
-<section>
-  <p class="section-label">Chapter Nine — The Best One</p>
-  <h2 class="section-heading">Now &<br><em>Forever</em></h2>
-  <div class="wedding-card">
-    <div class="wedding-rings">💍 ✨ 💍</div>
-    <h2 class="wedding-heading">10 years of<br><span>Love becomes</span><br>a Wedding Anniversary</h2>
-    <p class="wedding-body">
-      I am so happy, Tannu. Genuinely, fully, quietly happy — that this 10 years of relationship, these small moments, these balcony calls and kitchen stools and deleted friend requests — all of it is now stepping into something that lasts forever. With you.
-    </p>
-    <div class="wedding-date-badge">
-      <span class="wedding-date-main">20 April 2026 💍</span>
-      <div class="wedding-divider"></div>
-      <span class="wedding-date-sub">One month away · Our wedding</span>
-    </div>
-    <p class="anniv-note">Our anniversary: 24 October 🌙 — that's ours and always will be.</p>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-badge">Made with love · Only for Tannu 🌙</div>
-  <p>Happy Birthday my favourite person, my comfort zone, my Tannu. 💛✨</p>
-</footer>
 
 <script>
-/* ──────────────────────────
-   STARFIELD
-────────────────────────── */
-const canvas=document.getElementById('starfield'),ctx=canvas.getContext('2d');let stars=[];
-function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-function initStars(){stars=[];for(let i=0;i<240;i++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.3+0.2,phase:Math.random()*Math.PI*2,speed:Math.random()*0.003+0.001});}
-function drawStars(t){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{const a=0.25+0.55*Math.abs(Math.sin(s.phase+t*s.speed));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,248,220,${a})`;ctx.fill();});requestAnimationFrame(drawStars);}
-resize();initStars();requestAnimationFrame(drawStars);window.addEventListener('resize',()=>{resize();initStars();});
-
-/* ──────────────────────────
-   HEARTS
-────────────────────────── */
-const hc=document.getElementById('hearts'),he=['❤️','🌸','✨','💛','🌙','💗','🫧'];
-function spawnHeart(){const h=document.createElement('span');h.classList.add('heart');h.textContent=he[Math.floor(Math.random()*he.length)];h.style.left=Math.random()*100+'vw';h.style.fontSize=(0.6+Math.random()*0.9)+'rem';h.style.animationDuration=(9+Math.random()*10)+'s';h.style.animationDelay=(Math.random()*3)+'s';hc.appendChild(h);setTimeout(()=>h.remove(),22000);}
-setInterval(spawnHeart,1900);
-
-/* ──────────────────────────
-   SCROLL REVEAL
-────────────────────────── */
-document.querySelectorAll('section').forEach(s=>{s.style.opacity='0';s.style.transform='translateY(35px)';s.style.transition='opacity .9s ease,transform .9s ease';});
-new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});},{threshold:.06}).observe && document.querySelectorAll('section').forEach(s=>new IntersectionObserver(([e])=>{if(e.isIntersecting){s.style.opacity='1';s.style.transform='translateY(0)';}},{threshold:.06}).observe(s));
-
-/* ──────────────────────────
-   PHOTO PERSISTENCE (localStorage)
-────────────────────────── */
-const PHOTO_KEYS=['tannu_photo_0','tannu_photo_1','tannu_photo_2','tannu_photo_3','tannu_photo_4'];
-const LETTER_KEYS=['tannu_letter_0','tannu_letter_1','tannu_letter_2'];
-
-function loadPhoto(i,input){
-  const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(e){
-    const data=e.target.result;
-    try{localStorage.setItem(PHOTO_KEYS[i],data);}catch(err){console.warn('Storage full, photo not saved');}
-    renderPhoto(i,data);
-  };reader.readAsDataURL(file);
-}
-
-function renderPhoto(i,dataUrl){
-  const slot=document.getElementById('slot'+i);
-  slot.querySelectorAll('.upload-icon,.upload-hint').forEach(el=>el.style.display='none');
-  let img=slot.querySelector('img.slot-img');
-  if(!img){img=document.createElement('img');img.className='slot-img';slot.appendChild(img);}
-  img.src=dataUrl;
-  slot.classList.add('has-photo');
-}
-
-function triggerPhotoChange(e,i){
-  e.stopPropagation();
-  document.getElementById('slot'+i).querySelector('input[type="file"]').click();
-}
-
-// Load saved photos on start
-PHOTO_KEYS.forEach((key,i)=>{
-  try{const d=localStorage.getItem(key);if(d)renderPhoto(i,d);}catch(err){}
+/* ✅ APP LOADED */
+document.addEventListener("DOMContentLoaded",()=>{
+  console.log("App Loaded ✅");
 });
 
-/* ──────────────────────────
-   LETTER IMAGES (localStorage)
-────────────────────────── */
-const letterUrls=[null,null,null];
+/* ❤️ HEART BURST + SCROLL */
+document.getElementById('nextBtn').addEventListener('click',()=>{
+  for(let i=0;i<20;i++){
+    const h=document.createElement('div');
+    h.className='burst-heart';
+    h.textContent='❤️';
+    h.style.left=Math.random()*100+'vw';
+    h.style.top='70%';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),1000);
+  }
 
-function loadLetterImg(i,input){
-  const file=input.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=function(e){
-    const data=e.target.result;
-    try{localStorage.setItem(LETTER_KEYS[i],data);}catch(err){}
-    renderLetterImg(i,data);
-  };reader.readAsDataURL(file);
-}
-
-function renderLetterImg(i,dataUrl){
-  letterUrls[i]=dataUrl;
-  const slot=document.getElementById('lslot'+i);
-  slot.querySelectorAll('.letter-img-num,.letter-img-hint').forEach(el=>el.style.display='none');
-  let img=slot.querySelector('img.letter-preview');
-  if(!img){img=document.createElement('img');img.className='letter-preview';slot.appendChild(img);}
-  img.src=dataUrl;
-  slot.classList.add('has-img');
-}
-
-function viewLetterImg(i){
-  if(!letterUrls[i])return;
-  document.getElementById('letter-modal-img').src=letterUrls[i];
-  document.getElementById('letter-modal').classList.add('active');
-}
-
-function closeLetterModal(){document.getElementById('letter-modal').classList.remove('active');}
-
-LETTER_KEYS.forEach((key,i)=>{
-  try{const d=localStorage.getItem(key);if(d)renderLetterImg(i,d);}catch(err){}
+  document.querySelector('section').scrollIntoView({behavior:'smooth'});
 });
 
-/* ──────────────────────────
-   VIDEO
-────────────────────────── */
+/* 🎵 MUSIC FIRST CLICK */
+let started=false;
+document.body.addEventListener('click',()=>{
+  if(!started){
+    document.getElementById('bgMusic').play().catch(()=>{});
+    started=true;
+  }
+},{once:true});
+
+/* ✨ TYPING EFFECT */
+const text=`My Tannu,
+
+Remember the friend request I kept sending and deleting?
+
+That was me already falling for you.
+
+You are my comfort zone.
+And now… forever starts with you. 💛`;
+
+let i=0;
+function typeWriter(){
+  if(i<text.length){
+    document.getElementById("typingText").innerHTML+=text.charAt(i);
+    i++;
+    setTimeout(typeWriter,30);
+  }
+}
+
+const observer=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){
+    typeWriter();
+    observer.disconnect();
+  }
+});
+observer.observe(document.getElementById("typingText"));
+
+/* 💍 COUNTDOWN */
+const weddingDate=new Date("April 20, 2026 00:00:00").getTime();
+
+setInterval(()=>{
+  const now=new Date().getTime();
+  const gap=weddingDate-now;
+
+  const d=Math.floor(gap/(1000*60*60*24));
+  const h=Math.floor((gap%(1000*60*60*24))/(1000*60*60));
+  const m=Math.floor((gap%(1000*60*60))/(1000*60));
+
+  document.getElementById("countdown").innerHTML=
+    `${d} Days ${h} Hours ${m} Minutes left 💍`;
+},1000);
+
+/* 🎬 VIDEO PERSIST */
+const VIDEO_KEY="tannu_video";
+
 function loadVideo(input){
-  const file=input.files[0];if(!file)return;
-  const url=URL.createObjectURL(file);
+  const file=input.files[0];
+  if(!file)return;
+
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const data=e.target.result;
+    try{localStorage.setItem(VIDEO_KEY,data);}catch(err){}
+    renderVideo(data);
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderVideo(src){
   const player=document.getElementById('videoPlayer');
-  document.getElementById('vidPlaceholder').style.display='none';
-  player.src=url;player.style.display='block';
-  input.style.zIndex='-1';
-  const box=document.getElementById('videoBox');
-  box.style.border='none';box.style.cursor='default';
+  player.src=src;
+  player.style.display='block';
 }
 
-/* ──────────────────────────
-   MUSIC PLAYER
-────────────────────────── */
-const songs=[
-  {title:'Perfect',artist:'Ed Sheeran',why:'"Because you are, simply."',yt:'https://www.youtube.com/embed/2Vv-BfVoq4g?autoplay=1'},
-  {title:'Tum Hi Ho',artist:'Arijit Singh',why:'"My everything, every single day."',yt:'https://www.youtube.com/embed/IJq0yyWug9E?autoplay=1'},
-  {title:'A Thousand Years',artist:'Christina Perri',why:'"I\'d wait lifetimes for you, Tannu."',yt:'https://www.youtube.com/embed/rtOvBOTyX00?autoplay=1'},
-  {title:'Agar Tum Saath Ho',artist:'A.R. Rahman · Alka Yagnik',why:'"You complete every silence."',yt:'https://www.youtube.com/embed/HDnemxSMEOI?autoplay=1'},
-  {title:"Can't Help Falling in Love",artist:'Elvis Presley',why:'"Couldn\'t stop it even if I tried."',yt:'https://www.youtube.com/embed/vGJTaP6anOU?autoplay=1'},
-  {title:'Raabta',artist:'Pritam · Arijit Singh',why:'"It was always you. Always."',yt:'https://www.youtube.com/embed/5ZhAJCcMfeY?autoplay=1'},
-];
-
-function playSong(i){
-  const s=songs[i];
-  document.getElementById('m-title').textContent=s.title;
-  document.getElementById('m-artist').textContent=s.artist;
-  document.getElementById('m-why').textContent=s.why;
-  document.getElementById('music-iframe').src=s.yt;
-  document.getElementById('music-modal').classList.add('active');
+const savedVideo=localStorage.getItem(VIDEO_KEY);
+if(savedVideo){
+  renderVideo(savedVideo);
 }
-
-function closeMusic(){
-  document.getElementById('music-modal').classList.remove('active');
-  document.getElementById('music-iframe').src='';
-}
-
-document.getElementById('music-modal').addEventListener('click',function(e){
-  if(e.target===this)closeMusic();
-});
 </script>
+
 </body>
 </html>
