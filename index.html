@@ -213,6 +213,63 @@ footer p{font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--gold)
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
 
+/* HEART BURST BUTTON */
+#heart-btn{
+  position:fixed;bottom:2rem;right:2rem;z-index:100;
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--rose),#c0446a);
+  border:none;cursor:pointer;font-size:1.5rem;
+  box-shadow:0 4px 24px rgba(232,132,154,.45),0 0 0 0 rgba(232,132,154,.4);
+  animation:heartPulse 2.5s ease-in-out infinite;
+  transition:transform .15s;display:flex;align-items:center;justify-content:center;
+}
+#heart-btn:hover{transform:scale(1.1);}
+#heart-btn:active{transform:scale(0.93);}
+@keyframes heartPulse{0%,100%{box-shadow:0 4px 24px rgba(232,132,154,.4),0 0 0 0 rgba(232,132,154,.35);}50%{box-shadow:0 4px 32px rgba(232,132,154,.6),0 0 0 14px rgba(232,132,154,0);}}
+
+/* BURST HEART PARTICLES */
+.burst-heart{position:fixed;pointer-events:none;z-index:9999;font-size:1.4rem;animation:burstFly .9s ease-out forwards;}
+@keyframes burstFly{0%{opacity:1;transform:translate(0,0) scale(1);}100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(.4);}}
+
+/* MUSIC FAB */
+#music-fab{
+  position:fixed;bottom:2rem;left:2rem;z-index:100;
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,rgba(212,168,83,.9),rgba(180,130,50,.9));
+  border:none;cursor:pointer;font-size:1.4rem;
+  box-shadow:0 4px 24px rgba(212,168,83,.4);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,box-shadow .3s;
+}
+#music-fab:hover{transform:scale(1.1);box-shadow:0 6px 32px rgba(212,168,83,.6);}
+#music-fab:active{transform:scale(.93);}
+#music-fab.playing{animation:musicSpin 3s linear infinite;}
+@keyframes musicSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* MUSIC WELCOME TOAST */
+#music-toast{
+  position:fixed;bottom:5.5rem;left:2rem;z-index:101;
+  background:rgba(15,15,40,.95);border:1px solid var(--border);
+  border-radius:14px;padding:.8rem 1.2rem;
+  font-size:.78rem;color:var(--cream);letter-spacing:.05em;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  opacity:0;transform:translateY(8px);
+  transition:opacity .4s,transform .4s;pointer-events:none;
+}
+#music-toast.show{opacity:1;transform:translateY(0);}
+
+/* TYPING CURSOR */
+.typing-cursor{display:inline-block;width:2px;height:1em;background:var(--rose);vertical-align:middle;margin-left:3px;animation:blink .8s steps(1) infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* COUNTDOWN */
+.countdown-wrap{display:flex;gap:1.2rem;justify-content:center;margin:2rem 0 1rem;flex-wrap:wrap;position:relative;z-index:1;}
+.cd-block{display:flex;flex-direction:column;align-items:center;gap:.3rem;}
+.cd-num{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,3.5rem);font-weight:900;color:var(--gold);line-height:1;min-width:70px;text-align:center;}
+.cd-label{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);opacity:.7;}
+.cd-sep{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--gold);opacity:.3;align-self:flex-start;padding-top:.2rem;}
+.cd-done{font-family:'Dancing Script',cursive;font-size:1.6rem;color:var(--rose);}
+
 @media(max-width:600px){
   .photo-grid{grid-template-columns:1fr 1fr;grid-template-rows:170px 170px 170px;}
   .photo-slot:first-child{grid-column:span 2;grid-row:span 1;}
@@ -228,6 +285,13 @@ footer p{font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--gold)
 
 <canvas id="starfield"></canvas>
 <div class="hearts" id="hearts"></div>
+
+<!-- HEART BURST BUTTON -->
+<button id="heart-btn" title="Send hearts to Tannu!">❤️</button>
+
+<!-- MUSIC FAB -->
+<button id="music-fab" title="Play a song for Tannu">🎵</button>
+<div id="music-toast">🎵 Play a song for Tannu ✨</div>
 
 <!-- MUSIC MODAL -->
 <div id="music-modal">
@@ -252,9 +316,9 @@ footer p{font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--gold)
   <div class="cover-glow"></div>
   <p class="cover-date">25 March &nbsp;·&nbsp; Happy Birthday Tannu 🌙</p>
   <h1 class="cover-title">Hey<br><span>Tannu,</span><br>It's Your Day ✨</h1>
-  <p class="cover-sub">From the hostel balcony to forever — this is for you.</p>
+  <p class="cover-sub" id="cover-sub-typing"></p>
   <div class="cover-divider"></div>
-  <p class="cover-msg">Ten years of the most quietly beautiful story I've ever lived. Made only for you, Tannu — my comfort zone, my favourite person.</p>
+  <p class="cover-msg">One year of the most quietly beautiful story I've ever lived. Made only for you, Tannu — my comfort zone, my favourite person.</p>
   <div class="scroll-cta"><span>Scroll</span><div class="scroll-arrow"></div></div>
 </div>
 
@@ -306,7 +370,7 @@ footer p{font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--gold)
       <div class="tl-right">
         <p class="tl-time">Today — 25 March 2026</p>
         <p class="tl-title">A New Chapter Begins 💍</p>
-        <p class="tl-desc">Ten year of being yours. Ten year of knowing that one person is enough — that YOU are enough, every single day. And now, the story doesn't end. It begins.</p>
+        <p class="tl-desc">One year of being yours. One year of knowing that one person is enough — that YOU are enough, every single day. And now, the story doesn't end. It begins.</p>
       </div>
     </div>
 
@@ -540,14 +604,23 @@ footer p{font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--gold)
   <h2 class="section-heading">Now &<br><em>Forever</em></h2>
   <div class="wedding-card">
     <div class="wedding-rings">💍 ✨ 💍</div>
-    <h2 class="wedding-heading">10 years of<br><span>Love becomes</span><br>a Wedding Anniversary</h2>
+    <h2 class="wedding-heading">One year of<br><span>Love becomes</span><br>a Wedding Anniversary</h2>
     <p class="wedding-body">
-      I am so happy, Tannu. Genuinely, fully, quietly happy — that this 10 years of relationship, these small moments, these balcony calls and kitchen stools and deleted friend requests — all of it is now stepping into something that lasts forever. With you.
+      I am so happy, Tannu. Genuinely, fully, quietly happy — that this one year of relationship, these small moments, these balcony calls and kitchen stools and deleted friend requests — all of it is now stepping into something that lasts forever. With you.
     </p>
     <div class="wedding-date-badge">
       <span class="wedding-date-main">20 April 2026 💍</span>
       <div class="wedding-divider"></div>
-      <span class="wedding-date-sub">One month away · Our wedding</span>
+      <span class="wedding-date-sub">Our Wedding Day</span>
+    </div>
+    <div class="countdown-wrap" id="countdown-wrap">
+      <div class="cd-block"><span class="cd-num" id="cd-d">--</span><span class="cd-label">Days</span></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block"><span class="cd-num" id="cd-h">--</span><span class="cd-label">Hours</span></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block"><span class="cd-num" id="cd-m">--</span><span class="cd-label">Minutes</span></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-block"><span class="cd-num" id="cd-s">--</span><span class="cd-label">Seconds</span></div>
     </div>
     <p class="anniv-note">Our anniversary: 24 October 🌙 — that's ours and always will be.</p>
   </div>
@@ -559,31 +632,117 @@ footer p{font-family:'Dancing Script',cursive;font-size:1.1rem;color:var(--gold)
 </footer>
 
 <script>
-/* ──────────────────────────
-   STARFIELD
-────────────────────────── */
+/* ── STARFIELD ── */
 const canvas=document.getElementById('starfield'),ctx=canvas.getContext('2d');let stars=[];
 function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
 function initStars(){stars=[];for(let i=0;i<240;i++)stars.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*1.3+0.2,phase:Math.random()*Math.PI*2,speed:Math.random()*0.003+0.001});}
 function drawStars(t){ctx.clearRect(0,0,canvas.width,canvas.height);stars.forEach(s=>{const a=0.25+0.55*Math.abs(Math.sin(s.phase+t*s.speed));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle=`rgba(255,248,220,${a})`;ctx.fill();});requestAnimationFrame(drawStars);}
 resize();initStars();requestAnimationFrame(drawStars);window.addEventListener('resize',()=>{resize();initStars();});
 
-/* ──────────────────────────
-   HEARTS
-────────────────────────── */
+/* ── FLOATING HEARTS (ambient) ── */
 const hc=document.getElementById('hearts'),he=['❤️','🌸','✨','💛','🌙','💗','🫧'];
 function spawnHeart(){const h=document.createElement('span');h.classList.add('heart');h.textContent=he[Math.floor(Math.random()*he.length)];h.style.left=Math.random()*100+'vw';h.style.fontSize=(0.6+Math.random()*0.9)+'rem';h.style.animationDuration=(9+Math.random()*10)+'s';h.style.animationDelay=(Math.random()*3)+'s';hc.appendChild(h);setTimeout(()=>h.remove(),22000);}
 setInterval(spawnHeart,1900);
 
-/* ──────────────────────────
-   SCROLL REVEAL
-────────────────────────── */
-document.querySelectorAll('section').forEach(s=>{s.style.opacity='0';s.style.transform='translateY(35px)';s.style.transition='opacity .9s ease,transform .9s ease';});
-new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});},{threshold:.06}).observe && document.querySelectorAll('section').forEach(s=>new IntersectionObserver(([e])=>{if(e.isIntersecting){s.style.opacity='1';s.style.transform='translateY(0)';}},{threshold:.06}).observe(s));
+/* ── HEART BURST BUTTON ── */
+const burstEmojis=['❤️','💛','🌸','✨','💗','🌙','💍','🫧'];
+document.getElementById('heart-btn').addEventListener('click',function(e){
+  const rect=this.getBoundingClientRect();
+  const cx=rect.left+rect.width/2;
+  const cy=rect.top+rect.height/2;
+  const count=14;
+  for(let i=0;i<count;i++){
+    const el=document.createElement('span');
+    el.className='burst-heart';
+    el.textContent=burstEmojis[i%burstEmojis.length];
+    const angle=(Math.PI*2/count)*i;
+    const dist=80+Math.random()*70;
+    el.style.left=cx+'px';
+    el.style.top=cy+'px';
+    el.style.setProperty('--tx',Math.cos(angle)*dist+'px');
+    el.style.setProperty('--ty',Math.sin(angle)*dist+'px');
+    el.style.animationDelay=(Math.random()*0.12)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1100);
+  }
+  // also spawn a wave of floating hearts
+  for(let i=0;i<6;i++) setTimeout(spawnHeart, i*160);
+});
 
-/* ──────────────────────────
-   PHOTO PERSISTENCE (localStorage)
-────────────────────────── */
+/* ── MUSIC FAB ── */
+const fab=document.getElementById('music-fab');
+const toast=document.getElementById('music-toast');
+let fabSongIndex=0;
+let toastTimer=null;
+
+// Show toast on load after 2s
+setTimeout(()=>{
+  toast.classList.add('show');
+  toastTimer=setTimeout(()=>toast.classList.remove('show'),4000);
+},2000);
+
+fab.addEventListener('click',()=>{
+  clearTimeout(toastTimer);
+  toast.classList.remove('show');
+  playSong(fabSongIndex % songs.length);
+  fabSongIndex++;
+  fab.classList.add('playing');
+});
+
+/* ── TYPING EFFECT ── */
+const typingEl=document.getElementById('cover-sub-typing');
+const typingText='From the hostel balcony to forever — this is for you. 🌙';
+let tIdx=0,typingStarted=false;
+
+function startTyping(){
+  if(typingStarted) return;
+  typingStarted=true;
+  typingEl.style.opacity='1';
+  const cursor=document.createElement('span');
+  cursor.className='typing-cursor';
+  typingEl.appendChild(cursor);
+  function typeNext(){
+    if(tIdx<typingText.length){
+      typingEl.insertBefore(document.createTextNode(typingText[tIdx]),cursor);
+      tIdx++;
+      setTimeout(typeNext, tIdx<10?120:45+Math.random()*35);
+    } else {
+      setTimeout(()=>cursor.remove(),2000);
+    }
+  }
+  setTimeout(typeNext,1400);
+}
+// Start after cover animations settle
+setTimeout(startTyping,1200);
+
+/* ── SCROLL REVEAL ── */
+document.querySelectorAll('section').forEach(s=>{
+  s.style.opacity='0';s.style.transform='translateY(35px)';s.style.transition='opacity .9s ease,transform .9s ease';
+  new IntersectionObserver(([e])=>{if(e.isIntersecting){s.style.opacity='1';s.style.transform='translateY(0)';}},{threshold:.06}).observe(s);
+});
+
+/* ── WEDDING COUNTDOWN ── */
+function updateCountdown(){
+  const wedding=new Date('2026-04-20T00:00:00');
+  const now=new Date();
+  const diff=wedding-now;
+  if(diff<=0){
+    document.getElementById('countdown-wrap').innerHTML='<p class="cd-done">Today is the day, Tannu! 💍✨</p>';
+    return;
+  }
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor((diff%86400000)/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+  document.getElementById('cd-d').textContent=String(d).padStart(2,'0');
+  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown,1000);
+
+/* ── PHOTO PERSISTENCE (localStorage) ── */
 const PHOTO_KEYS=['tannu_photo_0','tannu_photo_1','tannu_photo_2','tannu_photo_3','tannu_photo_4'];
 const LETTER_KEYS=['tannu_letter_0','tannu_letter_1','tannu_letter_2'];
 
@@ -592,35 +751,22 @@ function loadPhoto(i,input){
   const reader=new FileReader();
   reader.onload=function(e){
     const data=e.target.result;
-    try{localStorage.setItem(PHOTO_KEYS[i],data);}catch(err){console.warn('Storage full, photo not saved');}
+    try{localStorage.setItem(PHOTO_KEYS[i],data);}catch(err){console.warn('Storage full');}
     renderPhoto(i,data);
   };reader.readAsDataURL(file);
 }
-
 function renderPhoto(i,dataUrl){
   const slot=document.getElementById('slot'+i);
   slot.querySelectorAll('.upload-icon,.upload-hint').forEach(el=>el.style.display='none');
   let img=slot.querySelector('img.slot-img');
   if(!img){img=document.createElement('img');img.className='slot-img';slot.appendChild(img);}
-  img.src=dataUrl;
-  slot.classList.add('has-photo');
+  img.src=dataUrl;slot.classList.add('has-photo');
 }
+function triggerPhotoChange(e,i){e.stopPropagation();document.getElementById('slot'+i).querySelector('input[type="file"]').click();}
+PHOTO_KEYS.forEach((key,i)=>{try{const d=localStorage.getItem(key);if(d)renderPhoto(i,d);}catch(err){}});
 
-function triggerPhotoChange(e,i){
-  e.stopPropagation();
-  document.getElementById('slot'+i).querySelector('input[type="file"]').click();
-}
-
-// Load saved photos on start
-PHOTO_KEYS.forEach((key,i)=>{
-  try{const d=localStorage.getItem(key);if(d)renderPhoto(i,d);}catch(err){}
-});
-
-/* ──────────────────────────
-   LETTER IMAGES (localStorage)
-────────────────────────── */
+/* ── LETTER IMAGES (localStorage) ── */
 const letterUrls=[null,null,null];
-
 function loadLetterImg(i,input){
   const file=input.files[0];if(!file)return;
   const reader=new FileReader();
@@ -630,53 +776,76 @@ function loadLetterImg(i,input){
     renderLetterImg(i,data);
   };reader.readAsDataURL(file);
 }
-
 function renderLetterImg(i,dataUrl){
   letterUrls[i]=dataUrl;
   const slot=document.getElementById('lslot'+i);
   slot.querySelectorAll('.letter-img-num,.letter-img-hint').forEach(el=>el.style.display='none');
   let img=slot.querySelector('img.letter-preview');
   if(!img){img=document.createElement('img');img.className='letter-preview';slot.appendChild(img);}
-  img.src=dataUrl;
-  slot.classList.add('has-img');
+  img.src=dataUrl;slot.classList.add('has-img');
 }
-
 function viewLetterImg(i){
   if(!letterUrls[i])return;
   document.getElementById('letter-modal-img').src=letterUrls[i];
   document.getElementById('letter-modal').classList.add('active');
 }
-
 function closeLetterModal(){document.getElementById('letter-modal').classList.remove('active');}
+LETTER_KEYS.forEach((key,i)=>{try{const d=localStorage.getItem(key);if(d)renderLetterImg(i,d);}catch(err){}});
 
-LETTER_KEYS.forEach((key,i)=>{
-  try{const d=localStorage.getItem(key);if(d)renderLetterImg(i,d);}catch(err){}
-});
+/* ── VIDEO — IndexedDB persistence ── */
+const VID_DB='tannuVidDB', VID_STORE='videos', VID_KEY='lastVideo';
+let vidDB=null;
 
-/* ──────────────────────────
-   VIDEO
-────────────────────────── */
-function loadVideo(input){
-  const file=input.files[0];if(!file)return;
-  const url=URL.createObjectURL(file);
+function openVidDB(cb){
+  if(vidDB){cb(vidDB);return;}
+  const req=indexedDB.open(VID_DB,1);
+  req.onupgradeneeded=e=>e.target.result.createObjectStore(VID_STORE);
+  req.onsuccess=e=>{vidDB=e.target.result;cb(vidDB);};
+  req.onerror=()=>console.warn('IndexedDB unavailable');
+}
+
+function saveVideoToDB(file){
+  openVidDB(db=>{
+    const tx=db.transaction(VID_STORE,'readwrite');
+    tx.objectStore(VID_STORE).put(file,VID_KEY);
+  });
+}
+
+function loadVideoFromDB(){
+  openVidDB(db=>{
+    const tx=db.transaction(VID_STORE,'readonly');
+    const req=tx.objectStore(VID_STORE).get(VID_KEY);
+    req.onsuccess=e=>{if(e.target.result)renderVideo(e.target.result);};
+  });
+}
+
+function renderVideo(fileOrBlob){
+  const url=URL.createObjectURL(fileOrBlob);
   const player=document.getElementById('videoPlayer');
   document.getElementById('vidPlaceholder').style.display='none';
   player.src=url;player.style.display='block';
-  input.style.zIndex='-1';
   const box=document.getElementById('videoBox');
   box.style.border='none';box.style.cursor='default';
+  document.getElementById('videoInput').style.zIndex='-1';
 }
 
-/* ──────────────────────────
-   MUSIC PLAYER
-────────────────────────── */
+function loadVideo(input){
+  const file=input.files[0];if(!file)return;
+  saveVideoToDB(file);
+  renderVideo(file);
+}
+
+// Load saved video on startup
+loadVideoFromDB();
+
+/* ── MUSIC PLAYER ── */
 const songs=[
-  {title:'Perfect',artist:'Ed Sheeran',why:'"Because you are, simply."',yt:'https://www.youtube.com/embed/2Vv-BfVoq4g?autoplay=1'},
-  {title:'Tum Hi Ho',artist:'Arijit Singh',why:'"My everything, every single day."',yt:'https://www.youtube.com/embed/IJq0yyWug9E?autoplay=1'},
-  {title:'A Thousand Years',artist:'Christina Perri',why:'"I\'d wait lifetimes for you, Tannu."',yt:'https://www.youtube.com/embed/rtOvBOTyX00?autoplay=1'},
-  {title:'Agar Tum Saath Ho',artist:'A.R. Rahman · Alka Yagnik',why:'"You complete every silence."',yt:'https://www.youtube.com/embed/HDnemxSMEOI?autoplay=1'},
-  {title:"Can't Help Falling in Love",artist:'Elvis Presley',why:'"Couldn\'t stop it even if I tried."',yt:'https://www.youtube.com/embed/vGJTaP6anOU?autoplay=1'},
-  {title:'Raabta',artist:'Pritam · Arijit Singh',why:'"It was always you. Always."',yt:'https://www.youtube.com/embed/5ZhAJCcMfeY?autoplay=1'},
+  {title:'Perfect',artist:'Ed Sheeran',why:'"Because you are, simply."',yt:'https://www.youtube.com/embed/2Vv-BfVoq4g?autoplay=1&rel=0'},
+  {title:'Tum Hi Ho',artist:'Arijit Singh',why:'"My everything, every single day."',yt:'https://www.youtube.com/embed/IJq0yyWug9E?autoplay=1&rel=0'},
+  {title:'A Thousand Years',artist:'Christina Perri',why:'"I\'d wait lifetimes for you, Tannu."',yt:'https://www.youtube.com/embed/rtOvBOTyX00?autoplay=1&rel=0'},
+  {title:'Agar Tum Saath Ho',artist:'A.R. Rahman · Alka Yagnik',why:'"You complete every silence."',yt:'https://www.youtube.com/embed/HDnemxSMEOI?autoplay=1&rel=0'},
+  {title:"Can't Help Falling in Love",artist:'Elvis Presley',why:'"Couldn\'t stop it even if I tried."',yt:'https://www.youtube.com/embed/vGJTaP6anOU?autoplay=1&rel=0'},
+  {title:'Raabta',artist:'Pritam · Arijit Singh',why:'"It was always you. Always."',yt:'https://www.youtube.com/embed/5ZhAJCcMfeY?autoplay=1&rel=0'},
 ];
 
 function playSong(i){
@@ -687,15 +856,12 @@ function playSong(i){
   document.getElementById('music-iframe').src=s.yt;
   document.getElementById('music-modal').classList.add('active');
 }
-
 function closeMusic(){
   document.getElementById('music-modal').classList.remove('active');
   document.getElementById('music-iframe').src='';
+  fab.classList.remove('playing');
 }
-
-document.getElementById('music-modal').addEventListener('click',function(e){
-  if(e.target===this)closeMusic();
-});
+document.getElementById('music-modal').addEventListener('click',function(e){if(e.target===this)closeMusic();});
 </script>
 </body>
 </html>
